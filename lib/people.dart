@@ -1,4 +1,4 @@
-class Avatar {
+class People {
   String id;
   String image;
   int age;
@@ -6,7 +6,7 @@ class Avatar {
   bool isFriend;
   List<int> interests;
 
-  Avatar(
+  People(
       {this.id,
       this.image,
       this.age,
@@ -14,7 +14,7 @@ class Avatar {
       this.isFriend,
       this.interests});
 
-  Avatar.fromJson(Map<String, dynamic> json) {
+  People.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     image = json['image'];
     age = json['age'];

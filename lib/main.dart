@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:circular_profile_avatar/circular_profile_avatar.dart';
 import 'package:provider/provider.dart';
 
-import 'avatar.dart';
+import 'people.dart';
 
 void main() {
   runApp(MyApp());
@@ -42,37 +42,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    // Provider.of<HomeScreenProvider>(context).getDataFromAPI(context);
-  }
-
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Provider.of<HomeScreenProvider>(context, listen: false)
         .getDataFromAPI(context);
   }
 
   String avatarStr = "";
-  List<Avatar> list;
+  List<People> list;
 
   @override
   Widget build(BuildContext context) {
-    // print(Provider.of<HomeScreenProvider>(context).list);
     return Consumer<HomeScreenProvider>(
       builder: (context, p, w) {
-        list = p.getAvatarList;
+        list = p.getPeopleList;
         print(list);
         if (list == null || list.length == 0) {
           return Container();
@@ -83,19 +67,15 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  Text(
-                    '$_counter',
-                    style: Theme.of(context).textTheme.headline4,
-                  ),
                   Container(
-                    constraints: BoxConstraints(maxHeight: 100),
+                    constraints: BoxConstraints(maxHeight: 80),
                     child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: list.length,
                         itemBuilder: (context, index) {
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: getCustomAvatar(list[index].image, index),
+                            child: getCustomAvatar(list[index], index),
                           );
                         }),
                   ),
@@ -114,14 +94,16 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget getCustomAvatar(String url, int index) {
+  Widget getCustomAvatar(People people, int index) {
     return CircularProfileAvatar(
-      url,
+      people.image,
       //'https://pic.3gbizhi.com/2020/0826/20200826123917742.jpg', //sets image path, it should be a URL string. default value is empty string, if path is empty it will display only initials
-      radius: 40, // sets radius, default 50.0
+      radius: 30, // sets radius, default 50.0
+      initialsText: Text(people.id),
+      showInitialTextAbovePicture: true,
       backgroundColor:
           Colors.transparent, // sets background color, default Colors.white
-      borderWidth: 5, // sets border, default 0.0
+      borderWidth: 2, // sets border, default 0.0
       borderColor: Colors.blueGrey, // sets border color, default Colors.white
       elevation:
           5.0, // sets elevation (shadow of the profile picture), default value is 0.0
@@ -129,10 +111,10 @@ class _MyHomePageState extends State<MyHomePage> {
       //     0.5), //sets foreground colour, it works if showInitialTextAbovePicture = true , default Colors.transparent
       cacheImage: true, // allow widget to cache image against provided url
       onTap: () {
-        print('adil');
-        setState(() {
-          avatarStr = "User ID is " + list[index].id;
-        });
+        // print('adil');
+        // setState(() {
+        //   avatarStr = "User ID is " + list[index].id;
+        // });
       }, // sets on tap
       progressIndicatorBuilder: (
         context,

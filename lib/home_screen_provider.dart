@@ -1,28 +1,25 @@
 import 'dart:convert';
 
-import 'package:avatar_demo/avatar.dart';
+import 'people.dart';
 import 'package:flutter/material.dart';
-import 'package:stacked/stacked.dart';
 import 'package:http/http.dart' as http;
 
 class HomeScreenProvider extends ChangeNotifier {
-  List<Avatar> list = List<Avatar>();
+  List<People> list = List<People>();
 
   Future<void> getDataFromAPI(BuildContext context) async {
     APIHelper hlp = APIHelper();
     var response =
         await hlp.postData("webservices/users_closest", context: context);
     if (response.isSuccess == true && response.data != null) {
-      // print(response.data.runtimeType);
-      for (var item in response.data) {
-        // print(item);
-        list.add(Avatar.fromJson(item as Map<String, dynamic>));
+      for (var item in response.data["data"]) {
+        list.add(People.fromJson(item as Map<String, dynamic>));
       }
     }
     notifyListeners();
   }
 
-  List<Avatar> get getAvatarList => list;
+  List<People> get getPeopleList => list;
 }
 
 class APIHelper {
